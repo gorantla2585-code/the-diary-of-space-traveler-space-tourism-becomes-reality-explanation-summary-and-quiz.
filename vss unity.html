@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Space Tourism & Modern Industry - Advanced Interactive Study Guide</title>
+  
+  <!-- Modern Typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      /* Dark Theme Variables */
+      --bg-base: #030712;
+      --bg-surface: rgba(15, 23, 42, 0.65);
+      --bg-surface-hover: rgba(30, 41, 59, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-color-hover: rgba(255, 255, 255, 0.2);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      
+      --accent-primary: #8b5cf6;
+      --accent-secondary: #3b82f6;
+      --accent-cyan: #06b6d4;
+      --accent-glow: rgba(139, 92, 246, 0.25);
+      
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.12);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --radius-full: 9999px;
+
+      --shadow-glass: 0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      --font-heading: 'Plus Jakarta Sans', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: rgba(255, 255, 255, 0.75);
+      --bg-surface-hover: rgba(255, 255, 255, 0.9);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-color-hover: rgba(0, 0, 0, 0.18);
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #94a3b8;
+      
+      --accent-primary: #7c3aed;
+      --accent-secondary: #2563eb;
+      --accent-cyan: #0891b2;
+      --accent-glow: rgba(124, 58, 237, 0.15);
+      
+      --shadow-glass: 0 20px 40px -15px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    /* Background Canvases */
+    #aurora-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+    #confetti-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999; pointer-events: none; }
+
+    /* Navigation Bar */
+    .top-nav {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      background: rgba(3, 7, 18, 0.65);
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.4s ease;
+    }
+    [data-theme="light"] .top-nav { background: rgba(248, 250, 252, 0.75); }
+
+    .nav-content { max-width: 1300px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px; background: linear-gradient(135deg, var(--text-main), var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Space Agencies Logo Bar */
+    .agency-logos-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 24px;
+      padding: 8px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-full);
+    }
+
+    .agency-logo-item {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .agency-logo-item:hover {
+      transform: translateY(-2px);
+      opacity: 0.8;
+    }
+
+    .agency-img-logo {
+      height: 18px; /* Default height */
+      width: auto;
+      object-fit: contain;
+      display: block;
+      transition: filter 0.3s ease;
+    }
+
+    /* Adjust specific logos for visual balance */
+    .img-nasa { height: 26px; }
+    .img-isro { height: 26px; }
+
+    /* Invert black logos to white in Dark Mode */
+    [data-theme="dark"] .logo-invert-dark {
+      filter: invert(1) brightness(2);
+    }
+
+    .nav-links { display: flex; align-items: center; gap: 18px; }
+    .nav-link { color: var(--text-muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; transition: color 0.2s ease; }
+    .nav-link:hover { color: var(--text-main); }
+    .theme-toggle-btn { background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 12px; border-radius: var(--radius-full); cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; transition: all 0.2s ease; }
+    .theme-toggle-btn:hover { border-color: var(--border-color-hover); transform: translateY(-1px); }
+
+    /* Scroll Progress Bar */
+    .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: transparent; }
+    .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan)); transition: width 0.1s ease-out; }
+
+    /* Layout Grids */
+    .main-wrapper { max-width: 1000px; margin: 0 auto; padding: 30px 24px 80px 24px; }
+    
+    /* Single Column Layout */
+    .content-grid { 
+      display: grid; 
+      grid-template-columns: 1fr; 
+      gap: 32px; 
+    }
+
+    /* Hero Section */
+    .hero-section { text-align: center; padding: 40px 20px 30px 20px; margin-bottom: 30px; position: relative; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: var(--radius-full); background: var(--bg-surface); border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan); margin-bottom: 20px; backdrop-filter: blur(12px); box-shadow: 0 4px 20px var(--accent-glow); }
+    .hero-title { font-family: var(--font-heading); font-size: clamp(2rem, 4.5vw, 3.4rem); font-weight: 800; line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 14px; background: linear-gradient(135deg, var(--text-main) 40%, var(--accent-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-subtitle { font-size: 1.1rem; color: var(--text-muted); max-width: 680px; margin: 0 auto 30px auto; font-weight: 400; }
+
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 40px; }
+    .stat-card { background: var(--bg-surface); border: 1px solid var(--border-color); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: var(--radius-md); padding: 18px; text-align: center; box-shadow: var(--shadow-glass); transition: transform 0.3s ease, border-color 0.3s ease; }
+    .stat-card:hover { transform: translateY(-4px); border-color: var(--border-color-hover); }
+    .stat-value { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 2px; background: linear-gradient(135deg, var(--accent-primary), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Glass Cards */
+    .glass-card { background: var(--bg-surface); border: 1px solid var(--border-color); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-lg); padding: 28px; margin-bottom: 28px; box-shadow: var(--shadow-glass); transition: transform 0.3s ease, border-color 0.3s ease; }
+    .glass-card.visible { opacity: 1; transform: translateY(0); }
+    .glass-card:hover { border-color: var(--border-color-hover); }
+    .card-title { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
+    .card-title i { color: var(--accent-primary); }
+
+    /* Citation */
+    .citation { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); padding: 2px 6px; border-radius: var(--radius-sm); text-decoration: none; margin-left: 4px; vertical-align: super; }
+
+    /* Timeline */
+    .timeline { position: relative; padding-left: 20px; margin-top: 16px; border-left: 2px solid var(--border-color); }
+    .timeline-item { position: relative; margin-bottom: 20px; }
+    .timeline-item:last-child { margin-bottom: 0; }
+    .timeline-item::before { content: ''; position: absolute; left: -27px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent-secondary); box-shadow: 0 0 12px var(--accent-secondary); }
+    .timeline-date { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan); font-weight: 600; margin-bottom: 4px; }
+    .timeline-desc { color: var(--text-muted); font-size: 0.92rem; }
+
+    /* Interactive Tabs */
+    .tab-nav-container { display: flex; gap: 6px; background: rgba(0, 0, 0, 0.2); padding: 6px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 18px; overflow-x: auto; }
+    .tab-btn { flex: 1; min-width: 90px; background: transparent; border: none; color: var(--text-muted); padding: 8px 12px; border-radius: var(--radius-sm); font-family: var(--font-body); font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .tab-btn.active { background: var(--bg-surface-hover); color: var(--text-main); box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid var(--border-color); }
+    .tab-content { display: none; animation: fadeInTab 0.3s ease-out; }
+    .tab-content.active { display: block; }
+    @keyframes fadeInTab { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Quiz Application Styles */
+    .quiz-app-container {
+      position: relative;
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .quiz-screen { display: none; animation: fadeInTab 0.4s ease-out; }
+    .quiz-screen.active { display: block; }
+
+    /* Start Screen */
+    .quiz-start-content { text-align: center; padding: 20px 10px; }
+    .quiz-start-icon {
+      width: 56px; height: 56px; color: var(--accent-primary);
+      margin: 0 auto 16px auto;
+      background: rgba(139, 92, 246, 0.1);
+      border-radius: 50%;
+      padding: 14px;
+      box-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    /* Active Quiz Screen */
+    .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+    .quiz-progress-track { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: var(--radius-full); margin-bottom: 20px; overflow: hidden; }
+    .quiz-progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-cyan)); width: 0%; transition: width 0.4s ease; }
+    
+    .quiz-question-text { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 20px; line-height: 1.45; }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+
+    .quiz-option {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      font-size: 0.92rem;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .quiz-option:hover { background: rgba(139, 92, 246, 0.08); border-color: var(--border-color-hover); transform: translateX(3px); }
+    .quiz-option.selected { background: rgba(139, 92, 246, 0.18); border-color: var(--accent-primary); box-shadow: 0 0 15px var(--accent-glow); }
+
+    .quiz-option-letter {
+      display: inline-flex; justify-content: center; align-items: center;
+      width: 26px; height: 26px; border-radius: 6px;
+      background: rgba(255,255,255,0.1); font-family: var(--font-mono);
+      font-size: 0.8rem; margin-right: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    
+    .quiz-option.selected .quiz-option-letter { background: var(--accent-primary); color: white; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 14px; border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white; font-family: var(--font-heading); font-size: 1rem; font-weight: 700;
+      border: none; cursor: pointer; transition: all 0.3s ease;
+      box-shadow: 0 8px 24px var(--accent-glow); margin-top: 20px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px var(--accent-glow); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* Results Dashboard & Circular Gauge */
+    .analytics-banner { display: flex; flex-direction: column; align-items: center; padding: 24px; border-radius: var(--radius-lg); background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); margin-bottom: 24px; text-align: center; }
+    .gauge-wrapper { position: relative; width: 120px; height: 120px; margin-bottom: 12px; }
+    .gauge-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+    .gauge-bg { fill: none; stroke: var(--border-color); stroke-width: 10; }
+    .gauge-progress { fill: none; stroke: var(--accent-primary); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 364; stroke-dashoffset: 364; transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .gauge-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: var(--font-heading); font-weight: 800; font-size: 1.5rem; color: var(--text-main); }
+    
+    .review-card { padding: 16px; border-radius: var(--radius-md); margin-bottom: 14px; border: 1px solid var(--border-color); background: rgba(255, 255, 255, 0.02); }
+    .review-card.correct { border-left: 4px solid var(--success); background: var(--success-bg); }
+    .review-card.incorrect { border-left: 4px solid var(--danger); background: var(--danger-bg); }
+    .review-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: var(--radius-sm); margin-bottom: 8px; color: white; }
+    .badge-pass { background: var(--success); }
+    .badge-fail { background: var(--danger); }
+    .review-explanation { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-color); font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+
+    .site-footer { text-align: center; padding: 40px 20px; color: var(--text-subtle); font-size: 0.85rem; border-top: 1px solid var(--border-color); margin-top: 60px; }
+  </style>
+</head>
+<body>
+
+  <!-- Dynamic Canvas Backgrounds -->
+  <canvas id="aurora-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Navigation & 100% Original Logos Bar -->
+  <header class="top-nav">
+    <div class="nav-content">
+      
+      <div class="nav-brand">
+        <i data-lucide="rocket"></i>
+        <span>ASTRO//STUDY</span>
+      </div>
+
+      <!-- Agency Official SVG Logo Bar -->
+      <div class="agency-logos-bar">
+        <!-- NASA Official SVG -->
+        <a href="#industry" class="agency-logo-item" title="NASA">
+          <img class="agency-img-logo img-nasa" src="https://commons.wikimedia.org/wiki/Special:FilePath/NASA_logo.svg" alt="NASA Logo">
+        </a>
+
+        <!-- ISRO Official SVG -->
+        <a href="#industry" class="agency-logo-item" title="ISRO">
+          <img class="agency-img-logo img-isro" src="https://commons.wikimedia.org/wiki/Special:FilePath/Indian_Space_Research_Organisation_Logo.svg" alt="ISRO Logo">
+        </a>
+
+        <!-- SpaceX Official SVG (Inverts to white in dark mode) -->
+        <a href="#industry" class="agency-logo-item" title="SpaceX">
+          <img class="agency-img-logo logo-invert-dark" src="https://commons.wikimedia.org/wiki/Special:FilePath/SpaceX-Logo.svg" alt="SpaceX Logo">
+        </a>
+
+        <!-- Skyroot Aerospace Official SVG (Inverts to white in dark mode) -->
+        <a href="#industry" class="agency-logo-item" title="Skyroot Aerospace">
+          <img class="agency-img-logo logo-invert-dark" src="https://commons.wikimedia.org/wiki/Special:FilePath/Skyroot_Logo.svg" alt="Skyroot Aerospace Logo">
+        </a>
+
+        <!-- Virgin Galactic Official SVG (Inverts to white in dark mode) -->
+        <a href="#summary" class="agency-logo-item" title="Virgin Galactic">
+          <img class="agency-img-logo logo-invert-dark" src="https://commons.wikimedia.org/wiki/Special:FilePath/Virgin_Galactic_logo.svg" alt="Virgin Galactic Logo">
+        </a>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#summary" class="nav-link">Summary</a>
+        <a href="#timeline" class="nav-link">Timeline</a>
+        <a href="#quiz-section" class="nav-link" style="color: var(--accent-cyan); font-weight: 700;">Take Quiz</a>
+        <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle Theme">
+          <i data-lucide="sun" id="theme-icon"></i>
+          <span id="theme-label">Mode</span>
+        </button>
+      </nav>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="scroll-progress"></div>
+    </div>
+  </header>
+
+  <!-- Main Platform Layout -->
+  <main class="main-wrapper">
+    
+    <!-- Hero Header -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+        <span>UNIT 2: THE DIARY OF A SPACE TRAVELLER</span>
+      </div>
+      <h1 class="hero-title">Space Tourism Becomes a Reality</h1>
+      <p class="hero-subtitle">Interactive study guide, real-time aerospace current affairs, and comprehensive diagnostic evaluation platform.</p>
+    </section>
+
+    <!-- Animated Statistics Banner -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" data-target="51.4">0</div>
+        <div class="stat-label">Miles Altitude Reached</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" data-target="250000" data-prefix="$">$0</div>
+        <div class="stat-label">Deposit per Ticket</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" data-target="600" data-suffix="+">0</div>
+        <div class="stat-label">Tourists Reserved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" data-target="14">0</div>
+        <div class="stat-label">Diagnostic Modules</div>
+      </div>
+    </section>
+
+    <!-- 1-Column Layout: Reading first, Quiz at Bottom -->
+    <div class="content-grid">
+      
+      <!-- TOP: Reading Material & Information -->
+      <div class="info-column">
+        
+        <!-- Summary Card -->
+        <article class="glass-card" id="summary">
+          <h2 class="card-title"><i data-lucide="file-text"></i> Executive Summary</h2>
+          <p>
+            The passage highlights the emergence of commercial space travel pioneered by Virgin Galactic<a href="#" class="citation"></a>. 
+            On December 13, 2018, its suborbital spaceplane, <em>VSS Unity</em>, soared to the edge of space at 51.4 miles (82 km) above sea level<a href="#" class="citation"></a>. 
+            On February 22, 2019, the aircraft took its first passenger, astronaut trainer Beth Moses, into space<a href="#" class="citation"></a>. 
+            She described seeing ice crystals, the curvature of the Earth, the Pacific Ocean, and feeling <em>"infinitely high"</em><a href="#" class="citation"></a>. 
+            With over 600 tourists paying $250,000 each, space tourism gained huge momentum<a href="#" class="citation"></a>. This initiative was originally inspired by founder Sir Richard Branson's childhood memory of watching the 1969 Apollo 11 moon landing<a href="#" class="citation"></a>.
+          </p>
+        </article>
+
+        <!-- Timeline Card -->
+        <article class="glass-card" id="timeline">
+          <h2 class="card-title"><i data-lucide="clock"></i> Timeline of VSS Unity</h2>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-date">1969</div>
+              <div class="timeline-desc">Sir Richard Branson is inspired to pursue space travel after watching the Apollo 11 moon landing on a black-and-white television set<a href="#" class="citation"></a>.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">December 13, 2018</div>
+              <div class="timeline-desc">VSS Unity successfully completes a historic flight, reaching 51.4 miles (82 km) to the edge of space<a href="#" class="citation"></a>.</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-date">February 22, 2019</div>
+              <div class="timeline-desc">Astronaut trainer Beth Moses makes history as the first non-pilot passenger aboard the VSS Unity<a href="#" class="citation"></a>.</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Interactive Industry Tabs Card -->
+        <article class="glass-card" id="industry">
+          <h2 class="card-title"><i data-lucide="globe"></i> Global Space Affairs (July 2026)</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">Select an organization tab below to review real-time global news and aerospace developments.</p>
+          
+          <div class="tab-nav-container">
+            <button class="tab-btn active" onclick="switchTab(event, 'tab-vikram')"><i data-lucide="zap" style="width: 14px;"></i> Skyroot</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-spacex')"><i data-lucide="send" style="width: 14px;"></i> SpaceX</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-nasa')"><i data-lucide="orbit" style="width: 14px;"></i> NASA</button>
+            <button class="tab-btn" onclick="switchTab(event, 'tab-isro')"><i data-lucide="cpu" style="width: 14px;"></i> ISRO</button>
+          </div>
+
+          <!-- Tab Content Sections -->
+          <div id="tab-vikram" class="tab-content active">
+            <h3 style="color: var(--accent-cyan); font-size: 1rem; margin-bottom: 6px;">India's Private Orbital Milestone</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">On <strong>July 18, 2026</strong>, Skyroot Aerospace successfully launched its small satellite launcher, <em>Vikram-1</em>, from ISRO's Satish Dhawan Space Centre. This marked the first time a private Indian company undertook an orbital launch from Indian soil.</p>
+          </div>
+          <div id="tab-spacex" class="tab-content">
+            <h3 style="color: var(--accent-cyan); font-size: 1rem; margin-bottom: 6px;">Starship's 13th Flight Test</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">On <strong>July 24, 2026</strong>, SpaceX lifted off Starship on its thirteenth flight test. This mission deployed 20 next-generation Starlink V3 satellites into orbit and executed a successful soft splashdown.</p>
+          </div>
+          <div id="tab-nasa" class="tab-content">
+            <h3 style="color: var(--accent-cyan); font-size: 1rem; margin-bottom: 6px;">Roman Space Telescope Fueling</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">On <strong>July 25, 2026</strong>, NASA technicians loaded 290 gallons of hydrazine fuel into the Nancy Grace Roman Space Telescope ahead of its launch to Lagrange point 2 (L2).</p>
+          </div>
+          <div id="tab-isro" class="tab-content">
+            <h3 style="color: var(--accent-cyan); font-size: 1rem; margin-bottom: 6px;">Centralized Recruitment Drive</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">On <strong>July 27, 2026</strong>, ISRO opened its Centralised Recruitment Board to fill over 240 vacancies across Department of Space units, expanding staffing for upcoming scientific endeavors.</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- BOTTOM: Interactive Quiz App -->
+      <div class="quiz-column" id="quiz-section">
+        <article class="glass-card" style="padding: 0; overflow: hidden; border-color: rgba(139, 92, 246, 0.3);">
+          
+          <div class="quiz-app-container" style="padding: 24px;">
+            
+            <!-- Screen 1: Start -->
+            <div id="quiz-screen-start" class="quiz-screen active">
+              <div class="quiz-start-content">
+                <div class="quiz-start-icon"><i data-lucide="cpu" style="width: 100%; height: 100%;"></i></div>
+                <h2 style="font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px; color: var(--text-main);">Diagnostic Assessment</h2>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 24px;">Test your knowledge on Unit 2 and the latest global space organization updates.</p>
+                <button class="btn-primary" onclick="startQuiz()">
+                  <i data-lucide="play-circle"></i> Start Assessment
+                </button>
+              </div>
+            </div>
+
+            <!-- Screen 2: Active Question -->
+            <div id="quiz-screen-active" class="quiz-screen">
+              <div class="quiz-header">
+                <span style="color: var(--accent-cyan);">MODULE <span id="q-current">1</span> OF 14</span>
+                <span id="q-percent">0%</span>
+              </div>
+              <div class="quiz-progress-track">
+                <div class="quiz-progress-bar" id="q-progress-fill"></div>
+              </div>
+
+              <div class="quiz-question-text" id="q-text">Loading question...</div>
+              
+              <div class="quiz-options" id="q-options-container">
+                <!-- Options injected via JavaScript -->
+              </div>
+
+              <button class="btn-primary" id="btn-next" onclick="nextQuestion()" disabled>
+                Continue <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
+
+            <!-- Screen 3: Results Dashboard -->
+            <div id="quiz-screen-results" class="quiz-screen">
+              <h2 class="card-title" style="justify-content: center; margin-bottom: 20px;">
+                <i data-lucide="bar-chart-3"></i> Assessment Results
+              </h2>
+              
+              <div class="analytics-banner">
+                <div class="gauge-wrapper">
+                  <svg class="gauge-svg" viewBox="0 0 130 130">
+                    <circle class="gauge-bg" cx="65" cy="65" r="58"></circle>
+                    <circle class="gauge-progress" id="gauge-circle" cx="65" cy="65" r="58"></circle>
+                  </svg>
+                  <div class="gauge-text" id="gauge-score-text">0%</div>
+                </div>
+                <h3 id="score-status-title" style="margin-bottom: 4px; font-family: var(--font-heading);">Evaluating...</h3>
+                <p id="score-summary-text" style="color: var(--text-muted); font-size: 0.85rem;">Final diagnostic processed.</p>
+              </div>
+
+              <h3 style="font-size: 1rem; margin-bottom: 12px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Detailed Review</h3>
+              <div id="review-container" style="max-height: 400px; overflow-y: auto; padding-right: 6px;">
+                <!-- Review Cards Injected via JS -->
+              </div>
+              
+              <button class="btn-primary" onclick="startQuiz()" style="background: var(--bg-surface-hover); color: var(--text-main); border: 1px solid var(--border-color); margin-top: 16px;">
+                <i data-lucide="rotate-ccw"></i> Restart Assessment
+              </button>
+            </div>
+
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>ASTRO//STUDY Educational Platform • Unit 2 Space Exploration • Updated July 2026</p>
+  </footer>
+
+  <!-- Vanilla JavaScript Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      try { lucide.createIcons(); } catch(e){}
+      initCanvas();
+      setupTheme();
+      setupScroll();
+      setupObserver();
+    });
+
+    function setupTheme() {
+      const btn = document.getElementById('theme-toggle');
+      const icon = document.getElementById('theme-icon');
+      const label = document.getElementById('theme-label');
+
+      function applyTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        try {
+          if (t === 'light') { icon.setAttribute('data-lucide', 'moon'); label.textContent = 'Dark'; }
+          else { icon.setAttribute('data-lucide', 'sun'); label.textContent = 'Light'; }
+          lucide.createIcons();
+        } catch(e){}
+        localStorage.setItem('astro-theme', t);
+      }
+
+      btn.addEventListener('click', () => {
+        const curr = document.documentElement.getAttribute('data-theme');
+        applyTheme(curr === 'dark' ? 'light' : 'dark');
+      });
+      applyTheme(localStorage.getItem('astro-theme') || 'dark');
+    }
+
+    let canvas, ctx, stars = [];
+    function initCanvas() {
+      canvas = document.getElementById('aurora-canvas');
+      ctx = canvas.getContext('2d');
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      drawBackground();
+    }
+    function resizeCanvas() {
+      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+      stars = [];
+      for(let i=0; i<120; i++){
+        stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.8+0.4, alpha: Math.random(), speed: Math.random()*0.015+0.005 });
+      }
+    }
+    function drawBackground() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      let bg = ctx.createLinearGradient(0,0,canvas.width,canvas.height);
+      if(isLight){ bg.addColorStop(0,'#f8fafc'); bg.addColorStop(1,'#e2e8f0'); }
+      else{ bg.addColorStop(0,'#030712'); bg.addColorStop(1,'#0f172a'); }
+      ctx.fillStyle = bg; ctx.fillRect(0,0,canvas.width,canvas.height);
+      
+      stars.forEach(s => {
+        s.alpha += s.speed;
+        if(s.alpha>1 || s.alpha<0) s.speed = -s.speed;
+        ctx.fillStyle = isLight ? `rgba(100,116,139,${Math.abs(s.alpha)*0.4})` : `rgba(255,255,255,${Math.abs(s.alpha)})`;
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI*2); ctx.fill();
+      });
+      requestAnimationFrame(drawBackground);
+    }
+
+    function switchTab(evt, tabId) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+    function setupScroll() {
+      window.addEventListener('scroll', () => {
+        const scrolled = ((document.body.scrollTop || document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+        document.getElementById('scroll-progress').style.width = scrolled + '%';
+      });
+    }
+    function setupObserver() {
+      const obs = new IntersectionObserver((entries, o) => {
+        entries.forEach(e => {
+          if(e.isIntersecting) {
+            if(e.target.classList.contains('stat-value')) animateCounter(e.target, o);
+            if(e.target.classList.contains('glass-card')) e.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.stat-value, .glass-card').forEach(el => obs.observe(el));
+    }
+    function animateCounter(el, observer) {
+      const tgt = parseFloat(el.getAttribute('data-target')), pre = el.getAttribute('data-prefix')||'', suf = el.getAttribute('data-suffix')||'';
+      let cur = 0, inc = tgt/40;
+      const t = setInterval(()=>{
+        cur += inc;
+        if(cur>=tgt){ cur=tgt; clearInterval(t); }
+        el.textContent = pre + (Number.isInteger(tgt) ? Math.floor(cur) : cur.toFixed(1)) + suf;
+      }, 30);
+      observer.unobserve(el);
+    }
+
+    /* Quiz Data and Interactive Controller */
+    const quizData = [
+      { id: "q1", question: "What was the name of Virgin Galactic's suborbital spaceplane?", options: ["Apollo 11", "VSS Unity", "Shonku Express", "Explorer I"], correctIndex: 1, explanation: "The text explicitly names Virgin Galactic's suborbital spaceplane as 'VSS Unity'." },
+      { id: "q2", question: "Who was the first passenger carried aboard VSS Unity into space?", options: ["Sir Richard Branson", "Professor Shonku", "Beth Moses", "Neil Armstrong"], correctIndex: 2, explanation: "Beth Moses, the company's astronaut trainer, was aboard as its first passenger on February 22, 2019." },
+      { id: "q3", question: "How much did each space tourist pay as a deposit for their journey?", options: ["$50,000", "$100,000", "$250,000", "$500,000"], correctIndex: 2, explanation: "More than 600 tourists paid a deposit of $250,000 each." },
+      { id: "q4", question: "What childhood event inspired Sir Richard Branson to wish to go to space?", options: ["Watching the Sputnik 1 launch", "Watching the Apollo 11 moon landing on TV", "Reading science fiction books", "Seeing a meteor shower"], correctIndex: 1, explanation: "Branson states that watching the Apollo 11 moon landing as a young boy inspired him." },
+      { id: "q5", question: "How high above sea level did VSS Unity reach on December 13, 2018?", options: ["20 miles (32 km)", "51.4 miles (82 km)", "100 miles (160 km)", "250 miles (400 km)"], correctIndex: 1, explanation: "On Dec 13, 2018, VSS Unity soared to 51.4 miles (82 km) above sea level." },
+      { id: "q6", question: "Deductive Reasoning: What was the approximate total capital raised strictly from tourist deposits?", options: ["$1.5 Million", "$15 Million", "$150 Million", "$1.5 Billion"], correctIndex: 2, explanation: "600 tourists multiplied by $250,000 equals $150,000,000." },
+      { id: "q7", question: "Detail Analysis: Which visual phenomenon did Beth Moses NOT explicitly report seeing?", options: ["The Pacific Ocean", "Ice crystals outside the window", "The Atlantic Ocean", "Bright white snow on mountains"], correctIndex: 2, explanation: "Moses explicitly described ice crystals, Earth's curve, snow, and the Pacific Ocean. Atlantic Ocean is unmentioned." },
+      { id: "q8", question: "Chronological Sequencing: Which is the correct order of events?", options: ["Apollo 11 landing → Beth Moses' flight → VSS Unity reaches 51.4 miles", "VSS Unity reaches 51.4 miles → Apollo 11 landing → Beth Moses' flight", "Apollo 11 landing → VSS Unity reaches 51.4 miles → Beth Moses' flight", "Beth Moses' flight → VSS Unity reaches 51.4 miles → Apollo 11 landing"], correctIndex: 2, explanation: "Apollo 11 (1969) → VSS Unity 51.4 mi (Dec 2018) → Beth Moses flight (Feb 2019)." },
+      { id: "q9", question: "Nuance: What medium did Sir Richard Branson witness the moon landing through?", options: ["High-definition broadcast", "Black-and-white television", "Portable radio", "Telescope"], correctIndex: 1, explanation: "The passage notes Branson watched Apollo 11 on a 'black-and-white television set'." },
+      { id: "q10", question: "Industry Context: Why did VSS Unity perform glide flights in May 2026?", options: ["To test a new rocket engine", "To train pilots for Delta-class spaceships", "To carry a NASA payload", "To break an altitude record"], correctIndex: 1, explanation: "VSS Unity was used to train pilots and ground crews for Virgin Galactic's next-gen Delta spaceships." },
+      { id: "q11", question: "Global Space Race: What role will SpaceX & Blue Origin play in Artemis III?", options: ["Carry tourists to ISS", "Provide spacesuits", "Provide prototype lunar landers for docking rehearsals", "Launch Orion"], correctIndex: 2, explanation: "During Artemis III, astronauts will practice docking with prototype lunar landers provided by SpaceX and Blue Origin." },
+      { id: "q12", question: "Current Affairs (July 2026): Which private Indian company launched Vikram-1 on July 18, 2026?", options: ["Blue Origin", "Skyroot Aerospace", "Agnikul Cosmos", "SpaceX"], correctIndex: 1, explanation: "Skyroot Aerospace launched Vikram-1, marking India's first private orbital launch." },
+      { id: "q13", question: "Current Affairs (July 2026): What did SpaceX deploy during Starship Flight 13 on July 24, 2026?", options: ["Lunar Gateway module", "Mars rover", "Starlink V3 satellites", "Space tourists"], correctIndex: 2, explanation: "SpaceX deployed 20 next-generation Starlink V3 satellites during Starship's 13th flight test." },
+      { id: "q14", question: "Current Affairs (July 2026): What preparation did NASA complete for Roman Space Telescope on July 25, 2026?", options: ["Deployed solar arrays", "Fueled with 290 gallons of hydrazine", "Launched to L2", "Returned to Earth"], correctIndex: 1, explanation: "NASA technicians loaded 290 gallons of hydrazine fuel into the Nancy Grace Roman Space Telescope." }
+    ];
+
+    let currentStep = 0;
+    let userAnswers = new Array(quizData.length).fill(null);
+    const letters = ['A', 'B', 'C', 'D'];
+
+    function switchQuizScreen(screenId) {
+      document.querySelectorAll('.quiz-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function startQuiz() {
+      currentStep = 0;
+      userAnswers.fill(null);
+      renderActiveQuestion();
+      switchQuizScreen('quiz-screen-active');
+      setTimeout(() => {
+        document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+
+    function renderActiveQuestion() {
+      const q = quizData[currentStep];
+      document.getElementById('q-current').textContent = currentStep + 1;
+      const pct = Math.round(((currentStep) / quizData.length) * 100);
+      document.getElementById('q-percent').textContent = `${pct}%`;
+      document.getElementById('q-progress-fill').style.width = `${pct}%`;
+
+      document.getElementById('q-text').innerHTML = `<strong>Q${currentStep+1}:</strong> ${q.question}`;
+      document.getElementById('btn-next').disabled = (userAnswers[currentStep] === null);
+      
+      if(currentStep === quizData.length - 1) {
+        document.getElementById('btn-next').innerHTML = `Submit Assessment <i data-lucide="check-circle"></i>`;
+      } else {
+        document.getElementById('btn-next').innerHTML = `Continue <i data-lucide="arrow-right"></i>`;
+      }
+      try { lucide.createIcons(); } catch(e){}
+
+      const container = document.getElementById('q-options-container');
+      container.innerHTML = '';
+      
+      q.options.forEach((optText, index) => {
+        const optDiv = document.createElement('div');
+        const isSelected = userAnswers[currentStep] === index;
+        optDiv.className = `quiz-option ${isSelected ? 'selected' : ''}`;
+        optDiv.onclick = () => selectOption(index);
+        
+        optDiv.innerHTML = `
+          <div class="quiz-option-letter">${letters[index]}</div>
+          <div class="quiz-option-text">${optText}</div>
+        `;
+        container.appendChild(optDiv);
+      });
+    }
+
+    function selectOption(index) {
+      userAnswers[currentStep] = index;
+      const opts = document.querySelectorAll('.quiz-option');
+      opts.forEach(o => o.classList.remove('selected'));
+      opts[index].classList.add('selected');
+      document.getElementById('btn-next').disabled = false;
+    }
+
+    function nextQuestion() {
+      if(currentStep < quizData.length - 1) {
+        currentStep++;
+        renderActiveQuestion();
+      } else {
+        calculateResults();
+      }
+    }
+
+    function calculateResults() {
+      document.getElementById('q-percent').textContent = `100%`;
+      document.getElementById('q-progress-fill').style.width = `100%`;
+
+      switchQuizScreen('quiz-screen-results');
+      
+      let score = 0;
+      const reviewContainer = document.getElementById('review-container');
+      reviewContainer.innerHTML = '';
+
+      quizData.forEach((q, i) => {
+        const uAns = userAnswers[i];
+        const isCorrect = uAns === q.correctIndex;
+        if(isCorrect) score++;
+
+        const uText = uAns !== null ? q.options[uAns] : '<em>Skipped</em>';
+        const cText = q.options[q.correctIndex];
+
+        const card = document.createElement('div');
+        card.className = `review-card ${isCorrect ? 'correct' : 'incorrect'}`;
+        card.innerHTML = `
+          <div class="review-badge ${isCorrect ? 'badge-pass' : 'badge-fail'}">
+            ${isCorrect ? '✓ Correct' : '✕ Needs Review'}
+          </div>
+          <div style="font-weight: 600; margin-bottom: 4px; font-size: 0.9rem;">Q${i+1}: ${q.question}</div>
+          <div style="font-size: 0.85rem; margin-bottom: 2px;">
+            Your Answer: <span style="font-weight: 700; color: ${isCorrect ? 'var(--success)' : 'var(--danger)'}">${uText}</span>
+          </div>
+          ${!isCorrect ? `<div style="font-size: 0.85rem; margin-bottom: 2px;">Correct Answer: <span style="font-weight: 700; color: var(--success)">${cText}</span></div>` : ''}
+          <div class="review-explanation"><strong>Analysis:</strong> ${q.explanation}</div>
+        `;
+        reviewContainer.appendChild(card);
+      });
+
+      const pct = Math.round((score / quizData.length) * 100);
+      const gaugeCircle = document.getElementById('gauge-circle');
+      const offset = 364.42 - (pct / 100) * 364.42;
+      
+      setTimeout(() => {
+        gaugeCircle.style.strokeDashoffset = offset;
+        document.getElementById('gauge-score-text').textContent = `${pct}%`;
+      }, 100);
+
+      const statusTitle = document.getElementById('score-status-title');
+      const sumText = document.getElementById('score-summary-text');
+      
+      if(pct >= 80) {
+        statusTitle.textContent = "Outstanding Achievement!";
+        statusTitle.style.color = "var(--success)";
+        sumText.textContent = `You scored ${score} out of 14 correctly.`;
+        triggerConfetti();
+      } else if (pct >= 60) {
+        statusTitle.textContent = "Good Progress!";
+        statusTitle.style.color = "var(--accent-cyan)";
+        sumText.textContent = `You scored ${score} out of 14 correctly.`;
+      } else {
+        statusTitle.textContent = "Needs Review";
+        statusTitle.style.color = "var(--danger)";
+        sumText.textContent = `You scored ${score} out of 14 correctly.`;
+      }
+      
+      setTimeout(() => {
+        document.getElementById('quiz-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+
+    function triggerConfetti() {
+      const cc = document.getElementById('confetti-canvas');
+      const cCtx = cc.getContext('2d');
+      cc.width = window.innerWidth; cc.height = window.innerHeight;
+      let pts = [];
+      const colors = ['#8b5cf6', '#3b82f6', '#06b6d4', '#10b981', '#f59e0b'];
+
+      for(let i=0; i<100; i++){
+        pts.push({
+          x: cc.width/2, y: cc.height/2,
+          vx: (Math.random()-0.5)*14, vy: (Math.random()-0.5)*14 - 6,
+          size: Math.random()*8+4, color: colors[Math.floor(Math.random()*colors.length)],
+          rot: Math.random()*360, rotSpd: (Math.random()-0.5)*10
+        });
+      }
+
+      let frame = 0;
+      function renderC() {
+        cCtx.clearRect(0,0,cc.width,cc.height);
+        pts.forEach(p => {
+          p.x += p.vx; p.y += p.vy; p.vy += 0.25; p.rot += p.rotSpd;
+          cCtx.save(); cCtx.translate(p.x, p.y); cCtx.rotate(p.rot*Math.PI/180);
+          cCtx.fillStyle = p.color; cCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+          cCtx.restore();
+        });
+        frame++;
+        if(frame < 150) requestAnimationFrame(renderC);
+        else cCtx.clearRect(0,0,cc.width,cc.height);
+      }
+      renderC();
+    }
+  </script>
+
+</body>
+</html>
